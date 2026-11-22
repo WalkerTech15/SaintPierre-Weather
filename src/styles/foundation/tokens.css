@@ -15,7 +15,7 @@
      notch darker, so text > text-2 > text-3 is still a three-step ladder. */
   --text-2: #5e6d84;
   --text-3: #64748b;
-  --border: rgba(15, 23, 42, 0.08);
+  --border: rgb(15, 23, 42, 0.08);
   --primary: #2563eb;
   --primary-600: #1d4ed8;
   --primary-soft: #eff4fe;
@@ -51,9 +51,9 @@
   --axis-ink: #64748b;
 
   /* Elevation */
-  --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04), 0 2px 8px rgba(15, 23, 42, 0.04);
-  --shadow-md: 0 2px 4px rgba(15, 23, 42, 0.04), 0 12px 32px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 4px 8px rgba(15, 23, 42, 0.05), 0 24px 56px rgba(15, 23, 42, 0.13);
+  --shadow-sm: 0 1px 2px rgb(15, 23, 42, 0.04), 0 2px 8px rgb(15, 23, 42, 0.04);
+  --shadow-md: 0 2px 4px rgb(15, 23, 42, 0.04), 0 12px 32px rgb(15, 23, 42, 0.08);
+  --shadow-lg: 0 4px 8px rgb(15, 23, 42, 0.05), 0 24px 56px rgb(15, 23, 42, 0.13);
 
   /* Radii */
   --r-sm: 12px;
@@ -99,14 +99,14 @@ body[data-theme="dark"] {
   --text: #f1f5f9;
   --text-2: #b3c0d4; /* raised from #94A3B8 for readable secondary text on dark */
   --text-3: #8b99ae; /* raised from #64748B for better muted-text contrast */
-  --border: rgba(148, 163, 184, 0.14);
-  --primary-soft: rgba(59, 130, 246, 0.16);
-  --sky-soft: rgba(2, 132, 199, 0.18);
-  --amber-soft: rgba(217, 119, 6, 0.18);
-  --emerald-soft: rgba(5, 150, 105, 0.18);
-  --violet-soft: rgba(124, 58, 237, 0.18);
-  --rose-soft: rgba(225, 29, 72, 0.18);
-  --yellow-soft: rgba(202, 138, 4, 0.18);
+  --border: rgb(148, 163, 184, 0.14);
+  --primary-soft: rgb(59, 130, 246, 0.16);
+  --sky-soft: rgb(2, 132, 199, 0.18);
+  --amber-soft: rgb(217, 119, 6, 0.18);
+  --emerald-soft: rgb(5, 150, 105, 0.18);
+  --violet-soft: rgb(124, 58, 237, 0.18);
+  --rose-soft: rgb(225, 29, 72, 0.18);
+  --yellow-soft: rgb(202, 138, 4, 0.18);
   --ink-primary: #93c5fd;
   --ink-sky: #7dd3fc;
   --ink-emerald: #6ee7b7;
@@ -115,7 +115,7 @@ body[data-theme="dark"] {
   --ink-yellow: #fde047;
   --grid-line: #22304b;
   --axis-ink: #8b99ae; /* was #64748b: 3.5:1 on the dark card, now 5.8:1 */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 2px 4px rgba(0, 0, 0, 0.3), 0 12px 32px rgba(0, 0, 0, 0.4);
-  --shadow-lg: 0 4px 8px rgba(0, 0, 0, 0.35), 0 24px 56px rgba(0, 0, 0, 0.5);
+  --shadow-sm: 0 1px 2px rgb(0, 0, 0, 0.25), 0 2px 8px rgb(0, 0, 0, 0.25);
+  --shadow-md: 0 2px 4px rgb(0, 0, 0, 0.3), 0 12px 32px rgb(0, 0, 0, 0.4);
+  --shadow-lg: 0 4px 8px rgb(0, 0, 0, 0.35), 0 24px 56px rgb(0, 0, 0, 0.5);
 }

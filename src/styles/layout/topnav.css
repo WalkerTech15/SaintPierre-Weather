@@ -5,13 +5,13 @@
   top: 0;
   z-index: 100;
   height: var(--topnav-h);
-  background: rgba(248, 250, 252, 0.82);
+  background: rgb(248, 250, 252, 0.82);
   -webkit-backdrop-filter: saturate(1.6) blur(16px);
   backdrop-filter: saturate(1.6) blur(16px);
   border-bottom: 1px solid var(--border);
 }
 body[data-theme="dark"] .topnav {
-  background: rgba(10, 20, 40, 0.85);
+  background: rgb(10, 20, 40, 0.85);
 }
 
 /* Three named groups (start/center/end) instead of one flat flex row, so
@@ -86,7 +86,7 @@ body[data-theme="dark"] .topnav {
 body[data-theme="dark"] .brand-logo {
   padding: 3px 10px;
   border-radius: 12px;
-  background: rgba(241, 245, 249, 0.94);
+  background: rgb(241, 245, 249, 0.94);
 }
 
 .topnav-actions {

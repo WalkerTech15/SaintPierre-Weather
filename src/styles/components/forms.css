@@ -31,9 +31,9 @@
     transform 0.3s var(--ease);
 }
 .search-bar:focus-within {
-  border-color: rgba(37, 99, 235, 0.45);
+  border-color: rgb(37, 99, 235, 0.45);
   box-shadow:
-    0 0 0 4px rgba(37, 99, 235, 0.1),
+    0 0 0 4px rgb(37, 99, 235, 0.1),
     var(--shadow-md);
 }
 .search-ico {
@@ -68,7 +68,7 @@
   background: var(--bg);
 }
 body[data-theme="dark"] .search-kbd {
-  background: rgba(148, 163, 184, 0.12);
+  background: rgb(148, 163, 184, 0.12);
 }
 
 .search-panel {

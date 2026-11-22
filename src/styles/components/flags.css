@@ -49,7 +49,7 @@
 .explore-emoji .flag {
   height: 90px;
   border-radius: 12px;
-  box-shadow: 0 8px 24px rgba(2, 6, 23, 0.3);
+  box-shadow: 0 8px 24px rgb(2, 6, 23, 0.3);
 }
 .explore-country .flag {
   height: 13px;

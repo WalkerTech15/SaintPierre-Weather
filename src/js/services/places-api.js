@@ -365,7 +365,7 @@ export function fetchPlaceCandidates(loc) {
   if (pending) return pending;
 
   const run = (async () => {
-    let places = [];
+    let places;
     try {
       const data = await getJson(`${GOOGLE_PLACES_PROXY_URL}?${key}`);
       places = Array.isArray(data?.places) ? data.places.filter((p) => p && p.photo) : [];
@@ -391,7 +391,7 @@ export function resolvePlacePhoto(ref) {
 
   const url = `${GOOGLE_PLACES_PROXY_URL}?photo=${encodeURIComponent(ref)}&w=${PHOTO_REQUEST_WIDTH}`;
   const run = (async () => {
-    let src = null;
+    let src;
     try {
       const data = await getJson(url);
       const candidate = data?.photo?.src;

@@ -12,11 +12,11 @@
   height: 44px;
   padding: 4px;
   border-radius: 999px;
-  background: rgba(15, 23, 42, 0.055);
+  background: rgb(15, 23, 42, 0.055);
   border: 1px solid var(--border);
 }
 body[data-theme="dark"] .seg-toggle {
-  background: rgba(148, 163, 184, 0.12);
+  background: rgb(148, 163, 184, 0.12);
 }
 .seg-toggle button {
   position: relative;
@@ -50,14 +50,14 @@ body[data-theme="dark"] .seg-toggle {
   border-radius: 999px;
   background: var(--card);
   border: 1px solid var(--border);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.08);
+  box-shadow: 0 1px 2px rgb(15, 23, 42, 0.08);
   transition:
     transform 0.35s var(--ease),
     width 0.35s var(--ease);
 }
 body[data-theme="dark"] .seg-thumb {
   background: #24314d;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 2px rgb(0, 0, 0, 0.25);
 }
 
 .seg-icons {
@@ -95,7 +95,7 @@ body[data-theme="dark"] .seg-thumb {
   width: 40px;
   height: 23px;
   border-radius: 999px;
-  background: rgba(100, 116, 139, 0.35);
+  background: rgb(100, 116, 139, 0.35);
   transition: background 0.25s;
 }
 .switch::after {
@@ -107,7 +107,7 @@ body[data-theme="dark"] .seg-thumb {
   height: 18px;
   border-radius: 50%;
   background: #fff;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.3);
+  box-shadow: 0 1px 3px rgb(15, 23, 42, 0.3);
   transition: translate 0.25s var(--ease);
 }
 .switch[aria-checked="true"] {
@@ -141,5 +141,5 @@ body[data-theme="dark"] .seg-thumb {
   background: var(--primary);
   border-color: var(--primary);
   color: #fff;
-  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 2px 8px rgb(37, 99, 235, 0.3);
 }

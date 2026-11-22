@@ -37,7 +37,7 @@
   color: #fff;
   font-size: 13.5px;
   font-weight: 600;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+  box-shadow: 0 4px 14px rgb(37, 99, 235, 0.3);
   transition:
     background 0.2s,
     transform 0.2s var(--ease),
@@ -46,7 +46,7 @@
 .btn-primary:hover {
   background: var(--primary-600);
   transform: translateY(-1px);
-  box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 6px 18px rgb(37, 99, 235, 0.35);
 }
 .btn-primary:active {
   transform: translateY(0) scale(0.97);

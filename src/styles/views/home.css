@@ -32,8 +32,8 @@
   inset: 0;
   background:
     var(--hero-text-scrim, linear-gradient(transparent, transparent)),
-    radial-gradient(120% 90% at 85% -10%, rgba(255, 255, 255, 0.28), transparent 55%),
-    radial-gradient(90% 70% at 10% 110%, rgba(2, 6, 23, 0.38), transparent 60%);
+    radial-gradient(120% 90% at 85% -10%, rgb(255, 255, 255, 0.28), transparent 55%),
+    radial-gradient(90% 70% at 10% 110%, rgb(2, 6, 23, 0.38), transparent 60%);
 }
 /* layered mountain silhouettes — evokes the scenery photo of the reference */
 .hero-bg::before {
@@ -99,9 +99,9 @@
   border-radius: inherit;
   background: linear-gradient(
     to right,
-    rgba(2, 6, 23, 0.6) 0%,
-    rgba(2, 6, 23, 0.36) 42%,
-    rgba(2, 6, 23, 0.08) 100%
+    rgb(2, 6, 23, 0.6) 0%,
+    rgb(2, 6, 23, 0.36) 42%,
+    rgb(2, 6, 23, 0.08) 100%
   );
 }
 /* hide the decorative mountain silhouette while a real photo is active */
@@ -138,7 +138,7 @@
   margin-top: var(--s-3);
   font-size: 13px;
   opacity: 0.92;
-  text-shadow: 0 1px 8px rgba(2, 6, 23, 0.55);
+  text-shadow: 0 1px 8px rgb(2, 6, 23, 0.55);
 }
 .hero-live {
   display: inline-flex;
@@ -162,8 +162,8 @@
   font-size: 13px;
   font-weight: 600;
   letter-spacing: 0.02em;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgb(255, 255, 255, 0.16);
+  border: 1px solid rgb(255, 255, 255, 0.22);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   border-radius: 999px;
@@ -176,8 +176,8 @@
   font-size: 13px;
   font-weight: 600;
   font-variant-numeric: tabular-nums;
-  background: rgba(255, 255, 255, 0.16);
-  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: rgb(255, 255, 255, 0.16);
+  border: 1px solid rgb(255, 255, 255, 0.22);
   -webkit-backdrop-filter: blur(8px);
   backdrop-filter: blur(8px);
   border-radius: 999px;
@@ -192,7 +192,7 @@
   letter-spacing: -0.03em;
   line-height: 1.08;
   margin-top: 16px;
-  text-shadow: 0 2px 24px rgba(2, 6, 23, 0.25);
+  text-shadow: 0 2px 24px rgb(2, 6, 23, 0.25);
 }
 .hero-region {
   display: flex;
@@ -213,14 +213,14 @@
   height: 38px;
   border-radius: 12px;
   flex-shrink: 0;
-  color: rgba(255, 255, 255, 0.85);
+  color: rgb(255, 255, 255, 0.85);
   transition:
     transform 0.2s var(--ease),
     background 0.2s,
     color 0.2s;
 }
 .hero-fav-btn:hover {
-  background: rgba(255, 255, 255, 0.18);
+  background: rgb(255, 255, 255, 0.18);
   color: #fff;
   transform: scale(1.08);
 }
@@ -245,14 +245,14 @@
   width: 88px;
   height: 88px;
   flex-shrink: 0;
-  filter: drop-shadow(0 6px 16px rgba(2, 6, 23, 0.25));
+  filter: drop-shadow(0 6px 16px rgb(2, 6, 23, 0.25));
 }
 .hero-temp {
   font-size: 68px;
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1;
-  text-shadow: 0 2px 24px rgba(2, 6, 23, 0.2);
+  text-shadow: 0 2px 24px rgb(2, 6, 23, 0.2);
 }
 .hero-temp sup {
   font-size: 0.42em;
@@ -274,7 +274,7 @@
   opacity: 0.95;
   /* small text over a real photo needs its own edge, now that the overlay
      behind it is lighter — same treatment as .hero-city/.hero-temp below */
-  text-shadow: 0 1px 8px rgba(2, 6, 23, 0.55);
+  text-shadow: 0 1px 8px rgb(2, 6, 23, 0.55);
 }
 .hero-hl b {
   font-weight: 700;
@@ -284,18 +284,18 @@
   height: 7px;
   border-radius: 50%;
   background: #4ade80;
-  box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.6);
+  box-shadow: 0 0 0 0 rgb(74, 222, 128, 0.6);
   animation: pulse 2.4s 3; /* brief attention cue, then a calm static dot */
 }
 @keyframes pulse {
   0% {
-    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.55);
+    box-shadow: 0 0 0 0 rgb(74, 222, 128, 0.55);
   }
   70% {
-    box-shadow: 0 0 0 7px rgba(74, 222, 128, 0);
+    box-shadow: 0 0 0 7px rgb(74, 222, 128, 0);
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0);
+    box-shadow: 0 0 0 0 rgb(74, 222, 128, 0);
   }
 }
 
@@ -340,9 +340,9 @@
 .hero-bg[data-sky="fog"] {
   --hero-text-scrim: linear-gradient(
     to right,
-    rgba(2, 6, 23, 0.26) 0%,
-    rgba(2, 6, 23, 0.2) 50%,
-    rgba(2, 6, 23, 0.14) 100%
+    rgb(2, 6, 23, 0.26) 0%,
+    rgb(2, 6, 23, 0.2) 50%,
+    rgb(2, 6, 23, 0.14) 100%
   );
 }
 
@@ -1017,7 +1017,7 @@ body[data-mode="simple"] .home-duo {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(2, 6, 23, 0) 30%, rgba(2, 6, 23, 0.55) 100%);
+  background: linear-gradient(180deg, rgb(2, 6, 23, 0) 30%, rgb(2, 6, 23, 0.55) 100%);
 }
 .explore-emoji {
   position: absolute;
@@ -1082,7 +1082,7 @@ body[data-mode="simple"] .home-duo {
   font-size: 18px;
   font-weight: 700;
   letter-spacing: -0.01em;
-  text-shadow: 0 1px 12px rgba(2, 6, 23, 0.4);
+  text-shadow: 0 1px 12px rgb(2, 6, 23, 0.4);
 }
 .explore-country {
   display: flex;

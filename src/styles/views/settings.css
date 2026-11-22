@@ -352,7 +352,7 @@
     box-shadow 0.2s;
 }
 .priv-tile:hover {
-  border-color: rgba(37, 99, 235, 0.4);
+  border-color: rgb(37, 99, 235, 0.4);
   transform: translateY(-2px);
   box-shadow: var(--shadow-sm);
 }

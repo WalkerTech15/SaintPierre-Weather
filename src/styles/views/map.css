@@ -95,19 +95,19 @@
 .map-filters .chip {
   height: 42px;
   padding: 0 16px;
-  border-color: rgba(148, 163, 184, 0.28);
+  border-color: rgb(148, 163, 184, 0.28);
   border-radius: 9px;
   background: var(--card);
-  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.07);
+  box-shadow: 0 4px 12px rgb(15, 23, 42, 0.07);
 }
 .map-filters .chip:not(.is-active):hover {
   border-color: var(--primary-300);
-  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 6px 16px rgb(15, 23, 42, 0.1);
 }
 .map-filters .chip.is-active {
   border-color: var(--primary);
   background: var(--primary);
-  box-shadow: 0 7px 16px rgba(37, 99, 235, 0.25);
+  box-shadow: 0 7px 16px rgb(37, 99, 235, 0.25);
 }
 body[data-theme="dark"] .map-filters .chip {
   border-color: var(--border);
@@ -255,7 +255,7 @@ body[data-theme="dark"] .map-filters .chip.is-active {
   flex-shrink: 0;
 }
 .cond-icon .wi {
-  filter: drop-shadow(0 2px 4px rgba(15, 23, 42, 0.12));
+  filter: drop-shadow(0 2px 4px rgb(15, 23, 42, 0.12));
 }
 .cond-main b {
   display: block;
@@ -344,7 +344,7 @@ body[data-theme="dark"] .map-filters .chip.is-active {
   border-radius: var(--r-md);
   overflow: hidden;
   background: #e8eef5;
-  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.1);
+  box-shadow: inset 0 0 0 1px rgb(15, 23, 42, 0.1);
   z-index: 0; /* keep Leaflet panes under the sticky topnav */
 }
 @media (max-width: 1439px) {
@@ -390,18 +390,18 @@ body[data-theme="dark"] .map-filters .chip.is-active {
   z-index: 0;
   width: 48px;
   height: 48px;
-  border: 2.5px solid rgba(37, 99, 235, 0.92);
+  border: 2.5px solid rgb(37, 99, 235, 0.92);
   border-radius: 50%;
   background: radial-gradient(
     circle,
-    rgba(37, 99, 235, 0.24) 0%,
-    rgba(37, 99, 235, 0.1) 70%,
+    rgb(37, 99, 235, 0.24) 0%,
+    rgb(37, 99, 235, 0.1) 70%,
     transparent 100%
   );
   box-shadow:
-    0 0 0 3px rgba(255, 255, 255, 0.88),
-    0 0 0 9px rgba(37, 99, 235, 0.18),
-    0 2px 10px rgba(15, 23, 42, 0.3);
+    0 0 0 3px rgb(255, 255, 255, 0.88),
+    0 0 0 9px rgb(37, 99, 235, 0.18),
+    0 2px 10px rgb(15, 23, 42, 0.3);
   pointer-events: none;
 }
 /* MapLibre UI matched to the design system */
@@ -563,7 +563,7 @@ body[data-theme="dark"] .maplibregl-ctrl button .maplibregl-ctrl-icon {
   border-radius: 50%;
   background: var(--primary);
   border: 3px solid #fff;
-  box-shadow: 0 2px 10px rgba(2, 6, 23, 0.5);
+  box-shadow: 0 2px 10px rgb(2, 6, 23, 0.5);
   animation: markerDrop 0.6s var(--ease);
 }
 @keyframes markerDrop {
@@ -585,7 +585,7 @@ body[data-theme="dark"] .maplibregl-ctrl button .maplibregl-ctrl-icon {
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: rgba(96, 165, 250, 0.8);
+  background: rgb(96, 165, 250, 0.8);
   opacity: 0; /* invisible once the finite animation ends — no permanent blinking */
   animation: mapPulse 2.4s ease-out 3;
 }
@@ -622,13 +622,13 @@ body[data-theme="dark"] .maplibregl-ctrl button .maplibregl-ctrl-icon {
   background: #4285f4;
   border: 2.5px solid #fff;
   box-shadow:
-    0 0 0 1px rgba(66, 133, 244, 0.5),
-    0 1px 4px rgba(0, 0, 0, 0.35);
+    0 0 0 1px rgb(66, 133, 244, 0.5),
+    0 1px 4px rgb(0, 0, 0, 0.35);
 }
 .user-loc-dot .uld-halo {
   width: 14px;
   height: 14px;
-  background: rgba(66, 133, 244, 0.35);
+  background: rgb(66, 133, 244, 0.35);
   animation: uldPulse 2s ease-out infinite;
 }
 @keyframes uldPulse {
@@ -689,8 +689,8 @@ body[data-theme="dark"] .maplibregl-ctrl button .maplibregl-ctrl-icon {
   padding: 8px;
   border: 1px solid var(--border);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+  background: rgb(255, 255, 255, 0.94);
+  box-shadow: 0 8px 24px rgb(15, 23, 42, 0.18);
   backdrop-filter: blur(12px);
 }
 /* Keeps the switcher from growing into .map-weather-panel, which floats at
@@ -730,7 +730,7 @@ body[data-theme="dark"] .maplibregl-ctrl button .maplibregl-ctrl-icon {
   min-height: 44px;
   padding: 0 12px;
   border-radius: 10px;
-  background: rgba(15, 23, 42, 0.04);
+  background: rgb(15, 23, 42, 0.04);
   color: #53627a;
   font-size: 12.5px;
   font-weight: 700;
@@ -743,7 +743,7 @@ body[data-theme="dark"] .maplibregl-ctrl button .maplibregl-ctrl-icon {
 }
 .map-layer:hover {
   color: #14213d;
-  background: rgba(15, 23, 42, 0.08);
+  background: rgb(15, 23, 42, 0.08);
 }
 /* Each row scrolls, and a scroll container clips anything drawn outside it —
    including the default ring 2px outside the button. The ring is drawn just
@@ -758,7 +758,7 @@ body[data-theme="dark"] .maplibregl-ctrl button .maplibregl-ctrl-icon {
 .map-layer.is-active {
   color: #fff;
   background: var(--primary);
-  box-shadow: 0 5px 12px rgba(37, 99, 235, 0.26);
+  box-shadow: 0 5px 12px rgb(37, 99, 235, 0.26);
 }
 .map-layer.is-loading {
   cursor: progress;
@@ -774,12 +774,12 @@ body[data-theme="dark"] .maplibregl-ctrl button .maplibregl-ctrl-icon {
 }
 .map-layer.is-disabled:hover {
   color: #a7b0c0;
-  background: rgba(15, 23, 42, 0.04);
+  background: rgb(15, 23, 42, 0.04);
 }
 .map-layer-badge {
   padding: 2px 6px;
   border-radius: 999px;
-  background: rgba(83, 98, 122, 0.14);
+  background: rgb(83, 98, 122, 0.14);
   color: #7c8aa0;
   font-size: 9.5px;
   font-weight: 700;
@@ -826,17 +826,17 @@ body[data-theme="dark"] .maplibregl-ctrl button .maplibregl-ctrl-icon {
 }
 .map-layer-fade-left {
   left: 0;
-  background: linear-gradient(to right, rgba(255, 255, 255, 0.94), transparent);
+  background: linear-gradient(to right, rgb(255, 255, 255, 0.94), transparent);
 }
 .map-layer-fade-right {
   right: 0;
-  background: linear-gradient(to left, rgba(255, 255, 255, 0.94), transparent);
+  background: linear-gradient(to left, rgb(255, 255, 255, 0.94), transparent);
 }
 body[data-theme="dark"] .map-layer-fade-left {
-  background: linear-gradient(to right, rgba(17, 24, 39, 0.95), transparent);
+  background: linear-gradient(to right, rgb(17, 24, 39, 0.95), transparent);
 }
 body[data-theme="dark"] .map-layer-fade-right {
-  background: linear-gradient(to left, rgba(17, 24, 39, 0.95), transparent);
+  background: linear-gradient(to left, rgb(17, 24, 39, 0.95), transparent);
 }
 
 .map-card .maplibregl-ctrl-top-left {
@@ -876,18 +876,18 @@ body[data-theme="dark"] .map-layer-fade-right {
      its (unset) bottom. */
   max-height: calc(100% - 56px);
   padding: 22px;
-  border: 1px solid rgba(255, 255, 255, 0.76);
+  border: 1px solid rgb(255, 255, 255, 0.76);
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.24);
+  background: rgb(255, 255, 255, 0.96);
+  box-shadow: 0 18px 48px rgb(15, 23, 42, 0.24);
   color: #111827;
   backdrop-filter: blur(16px);
   overflow-y: auto;
   overscroll-behavior: contain;
   /* geo-identity chip colours — subtle on both the frosted glass panel
      (desktop) and the flat themed card it becomes at the 820px breakpoint */
-  --geo-chip-bg: rgba(15, 23, 42, 0.05);
-  --geo-chip-border: rgba(15, 23, 42, 0.12);
+  --geo-chip-bg: rgb(15, 23, 42, 0.05);
+  --geo-chip-border: rgb(15, 23, 42, 0.12);
   --geo-chip-text: #334155;
 }
 .map-panel-head,
@@ -954,8 +954,8 @@ body[data-theme="dark"] .map-layer-fade-right {
    frosted glass panel (desktop) and the flat themed card it becomes at the
    820px breakpoint below. */
 body[data-theme="dark"] .map-weather-panel {
-  --geo-chip-bg: rgba(148, 163, 184, 0.14);
-  --geo-chip-border: rgba(148, 163, 184, 0.24);
+  --geo-chip-bg: rgb(148, 163, 184, 0.14);
+  --geo-chip-border: rgb(148, 163, 184, 0.24);
   --geo-chip-text: var(--text-2);
 }
 .geo-identity {
@@ -1050,7 +1050,7 @@ body[data-theme="dark"] .geo-hierarchy {
   border: 1px solid #e11d48;
   border-radius: 10px;
   background: #e11d48;
-  box-shadow: 0 5px 14px rgba(225, 29, 72, 0.25);
+  box-shadow: 0 5px 14px rgb(225, 29, 72, 0.25);
   color: #fff;
   font-size: 23px;
   line-height: 1;
@@ -1073,7 +1073,7 @@ body[data-theme="dark"] .geo-hierarchy {
   border-color: #be123c;
   background: #be123c;
   color: #fff;
-  box-shadow: 0 7px 18px rgba(225, 29, 72, 0.34);
+  box-shadow: 0 7px 18px rgb(225, 29, 72, 0.34);
   transform: scale(1.04);
 }
 .map-show-panel {
@@ -1086,10 +1086,10 @@ body[data-theme="dark"] .geo-hierarchy {
   align-items: center;
   gap: 8px;
   padding: 0 15px;
-  border: 1px solid rgba(255, 255, 255, 0.72);
+  border: 1px solid rgb(255, 255, 255, 0.72);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+  background: rgb(255, 255, 255, 0.95);
+  box-shadow: 0 8px 24px rgb(15, 23, 42, 0.2);
   color: #172033;
   font-size: 12.5px;
   font-weight: 700;
@@ -1158,7 +1158,7 @@ body[data-theme="dark"] .geo-hierarchy {
   color: #fff;
   font-size: 13.5px;
   font-weight: 700;
-  box-shadow: 0 8px 18px rgba(37, 99, 235, 0.23);
+  box-shadow: 0 8px 18px rgb(37, 99, 235, 0.23);
   transition:
     background 0.18s,
     transform 0.18s;
@@ -1216,7 +1216,7 @@ body[data-theme="dark"] .geo-hierarchy {
   background: #cbd5e1;
 }
 body[data-theme="dark"] .map-sheet-grip {
-  background: rgba(148, 163, 184, 0.4);
+  background: rgb(148, 163, 184, 0.4);
 }
 .map-panel-peek {
   display: none;
@@ -1496,10 +1496,10 @@ body[data-theme="dark"] .map-panel-loading-coords {
   flex-direction: column;
   gap: 10px;
   padding: 11px 13px 12px;
-  border: 1px solid rgba(255, 255, 255, 0.72);
+  border: 1px solid rgb(255, 255, 255, 0.72);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+  background: rgb(255, 255, 255, 0.94);
+  box-shadow: 0 8px 24px rgb(15, 23, 42, 0.18);
   color: #172033;
   backdrop-filter: blur(12px);
 }
@@ -1514,7 +1514,7 @@ body[data-theme="dark"] .map-panel-loading-coords {
   overflow-x: auto;
   scrollbar-width: none;
   border-radius: 10px;
-  background: rgba(15, 23, 42, 0.06);
+  background: rgb(15, 23, 42, 0.06);
 }
 .map-time-row::-webkit-scrollbar {
   display: none;
@@ -1534,7 +1534,7 @@ body[data-theme="dark"] .map-panel-loading-coords {
 }
 .map-time:hover:not([disabled]) {
   color: #14213d;
-  background: rgba(255, 255, 255, 0.85);
+  background: rgb(255, 255, 255, 0.85);
 }
 /* The row scrolls, and a scroll container clips anything drawn outside it —
    including the default focus ring 2px outside a button. Drawn just inside. */
@@ -1546,7 +1546,7 @@ body[data-theme="dark"] .map-panel-loading-coords {
 .map-time[aria-checked="true"] {
   background: var(--primary);
   color: #fff;
-  box-shadow: 0 4px 10px rgba(37, 99, 235, 0.24);
+  box-shadow: 0 4px 10px rgb(37, 99, 235, 0.24);
 }
 .map-time[disabled] {
   opacity: 0.45;
@@ -1585,7 +1585,7 @@ body[data-theme="dark"] .map-panel-loading-coords {
 .map-legend {
   margin: 0;
   padding-top: 9px;
-  border-top: 1px solid rgba(15, 23, 42, 0.1);
+  border-top: 1px solid rgb(15, 23, 42, 0.1);
 }
 .map-legend-title {
   margin-bottom: 7px;
@@ -1599,12 +1599,12 @@ body[data-theme="dark"] .map-panel-loading-coords {
 .map-legend-bar {
   height: 10px;
   border-radius: 999px;
-  box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.14);
+  box-shadow: inset 0 0 0 1px rgb(15, 23, 42, 0.14);
   background-repeat: no-repeat;
   background-size: 100% 100%;
   /* the ramp's transparent low end (no precipitation) needs something behind
      it, or it reads as "white" rather than "nothing" */
-  background-color: rgba(148, 163, 184, 0.18);
+  background-color: rgb(148, 163, 184, 0.18);
 }
 .map-legend-ticks {
   position: relative;
@@ -1700,7 +1700,7 @@ body[data-theme="dark"] .map-panel-loading-coords {
   gap: 9px 14px;
   margin: 10px 0 0;
   padding: 9px 0 0;
-  border-top: 1px solid rgba(15, 23, 42, 0.1);
+  border-top: 1px solid rgb(15, 23, 42, 0.1);
 }
 .map-aqi-item dt {
   margin: 0;
@@ -1805,13 +1805,13 @@ body[data-theme="light"] .map-lightning-strike strong {
 }
 .map-alert {
   padding: 9px 10px;
-  border: 1px solid rgba(217, 119, 6, 0.35);
+  border: 1px solid rgb(217, 119, 6, 0.35);
   border-radius: 10px;
-  background: rgba(217, 119, 6, 0.07);
+  background: rgb(217, 119, 6, 0.07);
 }
 .map-alert.is-tornado {
-  border-color: rgba(220, 38, 38, 0.4);
-  background: rgba(220, 38, 38, 0.08);
+  border-color: rgb(220, 38, 38, 0.4);
+  background: rgb(220, 38, 38, 0.08);
 }
 .map-alert-badge {
   margin: 0;
@@ -1868,19 +1868,19 @@ body[data-theme="light"] .map-lightning-strike strong {
 }
 
 body[data-theme="dark"] .map-weather-controls {
-  border-color: rgba(148, 163, 184, 0.22);
-  background: rgba(17, 24, 39, 0.95);
+  border-color: rgb(148, 163, 184, 0.22);
+  background: rgb(17, 24, 39, 0.95);
   color: var(--text);
 }
 body[data-theme="dark"] .map-time-row {
-  background: rgba(148, 163, 184, 0.12);
+  background: rgb(148, 163, 184, 0.12);
 }
 body[data-theme="dark"] .map-time {
   color: var(--text-2);
 }
 body[data-theme="dark"] .map-time:hover:not([disabled]) {
   color: var(--text);
-  background: rgba(148, 163, 184, 0.16);
+  background: rgb(148, 163, 184, 0.16);
 }
 body[data-theme="dark"] .map-time[aria-checked="true"] {
   color: #fff;
@@ -1894,7 +1894,7 @@ body[data-theme="dark"] .map-legend {
   border-color: var(--border);
 }
 body[data-theme="dark"] .map-legend-bar {
-  box-shadow: inset 0 0 0 1px rgba(148, 163, 184, 0.28);
+  box-shadow: inset 0 0 0 1px rgb(148, 163, 184, 0.28);
 }
 body[data-theme="dark"] .map-aqi-status,
 body[data-theme="dark"] .map-aqi-index-label,
@@ -2035,12 +2035,12 @@ body[data-theme="dark"] .map-recents-clear {
 body[data-theme="dark"] .map-layer-switcher,
 body[data-theme="dark"] .map-weather-panel,
 body[data-theme="dark"] .map-show-panel {
-  border-color: rgba(148, 163, 184, 0.22);
-  background: rgba(17, 24, 39, 0.95);
+  border-color: rgb(148, 163, 184, 0.22);
+  background: rgb(17, 24, 39, 0.95);
   color: var(--text);
 }
 body[data-theme="dark"] .map-layer {
-  background: rgba(148, 163, 184, 0.08);
+  background: rgb(148, 163, 184, 0.08);
   color: var(--text-2);
 }
 /* The rule above out-ranks `.map-layer.is-active { color: #fff }` (it adds an
@@ -2053,7 +2053,7 @@ body[data-theme="dark"] .map-layer.is-active {
 }
 body[data-theme="dark"] .map-layer:hover {
   color: var(--text);
-  background: rgba(148, 163, 184, 0.16);
+  background: rgb(148, 163, 184, 0.16);
 }
 body[data-theme="dark"] .map-layer.is-active:hover {
   background: var(--primary);
@@ -2061,10 +2061,10 @@ body[data-theme="dark"] .map-layer.is-active:hover {
 body[data-theme="dark"] .map-layer.is-disabled,
 body[data-theme="dark"] .map-layer.is-disabled:hover {
   color: var(--text-3);
-  background: rgba(148, 163, 184, 0.04);
+  background: rgb(148, 163, 184, 0.04);
 }
 body[data-theme="dark"] .map-layer-badge {
-  background: rgba(148, 163, 184, 0.16);
+  background: rgb(148, 163, 184, 0.16);
   color: var(--text-3);
 }
 body[data-theme="dark"] .map-panel-current,
@@ -2166,7 +2166,7 @@ body[data-theme="dark"] .map-hour > span {
     border-width: 1px 0 0;
     border-radius: 20px 20px 0 0;
     background: var(--card);
-    box-shadow: 0 -14px 36px rgba(15, 23, 42, 0.2);
+    box-shadow: 0 -14px 36px rgb(15, 23, 42, 0.2);
     color: var(--text);
     backdrop-filter: none;
     overflow: hidden;
@@ -2435,14 +2435,14 @@ body.map-expanded .topnav {
      includes the inset (--mx-left), so that gutter would count it twice;
      the inner row's padding is the only gutter here. */
   padding: 0;
-  border: 1px solid rgba(255, 255, 255, 0.72);
+  border: 1px solid rgb(255, 255, 255, 0.72);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.18);
+  background: rgb(255, 255, 255, 0.94);
+  box-shadow: 0 8px 24px rgb(15, 23, 42, 0.18);
 }
 body[data-theme="dark"].map-expanded .topnav {
-  border-color: rgba(148, 163, 184, 0.22);
-  background: rgba(17, 24, 39, 0.95);
+  border-color: rgb(148, 163, 184, 0.22);
+  background: rgb(17, 24, 39, 0.95);
 }
 /* The dashboard's ≥901px three-column grid centres the search against a
    full-width bar; this bar is not full width, so it is a plain row here. */
@@ -2497,10 +2497,10 @@ body.map-expanded .topnav-actions #modeToggle {
   align-items: center;
   gap: 8px;
   padding: 0 15px;
-  border: 1px solid rgba(255, 255, 255, 0.72);
+  border: 1px solid rgb(255, 255, 255, 0.72);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.95);
-  box-shadow: 0 8px 24px rgba(15, 23, 42, 0.2);
+  background: rgb(255, 255, 255, 0.95);
+  box-shadow: 0 8px 24px rgb(15, 23, 42, 0.2);
   color: #172033;
   font-size: 12.5px;
   font-weight: 700;
@@ -2526,8 +2526,8 @@ body.map-expanded .map-exit-expand {
   align-items: center;
 }
 body[data-theme="dark"] .map-exit-expand {
-  border-color: rgba(148, 163, 184, 0.22);
-  background: rgba(17, 24, 39, 0.95);
+  border-color: rgb(148, 163, 184, 0.22);
+  background: rgb(17, 24, 39, 0.95);
   color: var(--text);
 }
 

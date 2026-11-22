@@ -29,7 +29,7 @@
 }
 .pill-heart {
   color: var(--ink-primary);
-  border-color: rgba(37, 99, 235, 0.25);
+  border-color: rgb(37, 99, 235, 0.25);
   background: var(--primary-soft);
 }
 .pill-heart [aria-hidden] {
@@ -50,7 +50,7 @@
   position: absolute;
   left: 50%;
   top: 46%;
-  border: 1.5px dashed rgba(255, 255, 255, 0.26);
+  border: 1.5px dashed rgb(255, 255, 255, 0.26);
   border-radius: 50%;
   translate: -50% -50%;
   animation: ringSpin 60s linear infinite;
@@ -75,7 +75,7 @@
   width: 58px;
   height: 58px;
   animation: artFloat 8s ease-in-out infinite alternate;
-  filter: drop-shadow(0 6px 14px rgba(2, 6, 23, 0.18));
+  filter: drop-shadow(0 6px 14px rgb(2, 6, 23, 0.18));
 }
 .art-wicon.w1 {
   left: 12%;

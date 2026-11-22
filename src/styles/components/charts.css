@@ -6,11 +6,11 @@
   flex-wrap: wrap;
   gap: 6px;
   padding: 4px;
-  background: rgba(15, 23, 42, 0.055);
+  background: rgb(15, 23, 42, 0.055);
   border-radius: 999px;
 }
 body[data-theme="dark"] .chart-tabs {
-  background: rgba(148, 163, 184, 0.12);
+  background: rgb(148, 163, 184, 0.12);
 }
 .chart-tabs button {
   padding: 7px 16px;
@@ -29,11 +29,11 @@ body[data-theme="dark"] .chart-tabs {
 .chart-tabs button[aria-selected="true"] {
   background: var(--card);
   color: var(--text);
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.12);
+  box-shadow: 0 1px 3px rgb(15, 23, 42, 0.12);
 }
 body[data-theme="dark"] .chart-tabs button[aria-selected="true"] {
   background: #24314d;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 1px 3px rgb(0, 0, 0, 0.4);
 }
 
 /* Match the Home and Forecast metric switches to the rectangular

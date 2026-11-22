@@ -774,7 +774,7 @@ async function wikimediaGeoPhoto(loc) {
   const pending = WIKIMEDIA_IN_FLIGHT.get(cacheKey);
   if (pending) return pending;
   const run = (async () => {
-    let best = null;
+    let best;
     try {
       best = withGeoProvenance(
         loc,
@@ -805,7 +805,7 @@ async function wikimediaTextPhoto(loc) {
   const pending = WIKIMEDIA_IN_FLIGHT.get(cacheKey);
   if (pending) return pending;
   const run = (async () => {
-    let best = null;
+    let best;
     try {
       best = withTextProvenance(
         loc,
@@ -876,7 +876,7 @@ async function fetchAreaPhoto(loc) {
     else {
       const areaLoc = areaLocation(target);
       const run = (async () => {
-        let best = null;
+        let best;
         try {
           best = rankPexelsCandidates(
             areaLoc,
