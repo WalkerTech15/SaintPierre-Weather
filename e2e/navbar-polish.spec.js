@@ -474,19 +474,20 @@ test.describe("navbar polish: #modeToggle and #modeToggleSide stay in sync", () 
 /* The navbar with the mode toggle restored: logo, search, mode toggle, theme
  * and language all present, visible, balanced, and independently usable. */
 test.describe("navbar polish: all navbar controls stay accessible and usable", () => {
-  test("logo, search, mode toggle, theme and language are all present, and the actions group holds exactly three controls", async ({
+  test("logo, search, mode toggle, notifications, theme and language are all present", async ({
     page,
   }) => {
     await freshAt(page, { width: 1280, height: 800 });
     await expect(page.locator("#logoLink")).toBeVisible();
     await expect(page.locator("#searchInput")).toBeVisible();
     await expect(page.locator("#modeToggle")).toBeVisible();
+    await expect(page.locator("#notifBtn")).toBeVisible();
     await expect(page.locator("#themeBtn")).toBeVisible();
     await expect(page.locator("#langBtn")).toBeVisible();
 
-    /* the actions group is mode toggle + theme + language */
+    /* The notification button is a first-class navbar action. */
     const actionGroups = await page.locator(".topnav-actions > *").evaluateAll((els) => els.length);
-    expect(actionGroups).toBe(3);
+    expect(actionGroups).toBe(4);
   });
 
   test("mode toggle, theme and language buttons are reachable by keyboard and operable in sequence", async ({
@@ -502,6 +503,8 @@ test.describe("navbar polish: all navbar controls stay accessible and usable", (
     await page.keyboard.press("Enter");
     await expect(page.locator("body")).toHaveAttribute("data-mode", "detailed");
 
+    await page.keyboard.press("Tab");
+    await expect(page.locator("#notifBtn")).toBeFocused();
     await page.keyboard.press("Tab");
     await expect(page.locator("#themeBtn")).toBeFocused();
     await page.keyboard.press("Tab");

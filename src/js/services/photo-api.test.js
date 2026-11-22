@@ -1170,6 +1170,16 @@ describe("server proxies agree on the multi-candidate contract", () => {
     expect(src).toMatch(/CANDIDATE_COUNT\s*=\s*8/);
     expect(src).toMatch(/'photos'\s*=>\s*\$photos/);
   });
+
+  it("public/api/pexels.php supports curated photo IDs and validates returned hosts", () => {
+    const src = read("../../../public/api/pexels.php");
+    expect(src).toMatch(/PEXELS_PHOTO_ENDPOINT\s*=\s*'https:\/\/api\.pexels\.com\/v1\/photos'/);
+    expect(src).toMatch(/PHOTO_ID_PATTERN/);
+    expect(src).toMatch(/fetch_from_pexels_photo\(\$id,\s*\$apiKey\)/);
+    expect(src).toMatch(
+      /safe_provider_url\(\$src\['large'\]\s*\?\?\s*null,\s*'images\.pexels\.com'\)/,
+    );
+  });
 });
 
 /* Static-config check, not a runtime one: no Apache runs in CI, so this can't

@@ -64,6 +64,7 @@ import {
   asWaterOverview,
   asAreaLandmark,
   provenanceLabel,
+  provenanceBadge,
   photoAltText,
 } from "../ui/photo-provenance.js";
 import {
@@ -1072,10 +1073,11 @@ function renderPhotoCredit(host, photo, extraClass = "") {
      next to the photo, not merely reachable through the tooltip, which is
      where Pexels and Commons put the photographer. */
   const source = SOURCE_LABEL[photo.source]?.(photo) || "Pexels ↗";
-  /* Keep the visible credit compact: the provider and photographer/source
-     remain visible, while the provenance wording stays available through the
-     accessible name, title, and data attribute. */
-  a.textContent = source;
+  /* Keep the visible credit honest as well as the accessible name: the short
+     tier badge says whether this is exact, nearby, regional, or illustrative;
+     the provider/source remains visible beside it. */
+  const badge = provenanceBadge(photo);
+  a.textContent = badge ? `${badge} · ${source}` : source;
 
   const tier = photoProvenance(photo);
   a.dataset.provenance = tier;

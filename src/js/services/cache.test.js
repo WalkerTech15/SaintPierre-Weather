@@ -27,7 +27,7 @@ describe("createAsyncCache", () => {
     expect(calls).toBe(2);
   });
 
-  it("refetches once the TTL has expired", () => {
+  it("refetches once the TTL after success has expired", async () => {
     vi.useFakeTimers();
     try {
       const cache = createAsyncCache(1000);
@@ -38,12 +38,63 @@ describe("createAsyncCache", () => {
       };
       cache.get("a", factory);
       expect(calls).toBe(1);
-      vi.advanceTimersByTime(1500); // past the 1000ms TTL
+      await Promise.resolve(); // let the first request settle and start its TTL
+      vi.advanceTimersByTime(1500);
       cache.get("a", factory);
       expect(calls).toBe(2);
     } finally {
       vi.useRealTimers();
     }
+  });
+
+  it("keeps a slow in-flight request deduplicated past the TTL and starts expiry after success", async () => {
+    vi.useFakeTimers();
+    try {
+      const cache = createAsyncCache(1000);
+      let resolveFirst;
+      let calls = 0;
+      const first = new Promise((resolve) => {
+        resolveFirst = resolve;
+      });
+      const p1 = cache.get("a", () => {
+        calls++;
+        return first;
+      });
+
+      vi.advanceTimersByTime(1500);
+      expect(cache.get("a", () => Promise.resolve("duplicate"))).toBe(p1);
+      expect(calls).toBe(1);
+
+      resolveFirst("value");
+      await expect(p1).resolves.toBe("value");
+      await Promise.resolve(); // allow the cache's fulfillment handler to record its TTL start
+      expect(cache.get("a", () => Promise.resolve("early"))).toBe(p1);
+
+      vi.advanceTimersByTime(1001);
+      cache.get("a", () => {
+        calls++;
+        return Promise.resolve("refreshed");
+      });
+      expect(calls).toBe(2);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("does not let a cleared request's rejection evict its replacement", async () => {
+    const cache = createAsyncCache(60000);
+    let rejectFirst;
+    const first = new Promise((_resolve, reject) => {
+      rejectFirst = reject;
+    });
+    const p1 = cache.get("a", () => first);
+    cache.clear();
+    const p2 = cache.get("a", () => Promise.resolve("new"));
+
+    rejectFirst(new Error("old request failed"));
+    await expect(p1).rejects.toThrow("old request failed");
+    await Promise.resolve();
+    expect(cache.get("a", () => Promise.resolve("unexpected"))).toBe(p2);
   });
 
   it("evicts a rejected entry so the next call retries", async () => {

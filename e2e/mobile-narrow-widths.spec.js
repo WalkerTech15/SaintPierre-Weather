@@ -79,7 +79,7 @@ for (const width of WIDTHS) {
       await expect(page.locator("#heroCityName")).not.toBeEmpty();
 
       const boxes = await page.evaluate(() =>
-        ["#burgerBtn", "#mobileSearchBtn", "#themeBtn", "#langBtn"].map((sel) => {
+        ["#burgerBtn", "#mobileSearchBtn", "#notifBtn", "#themeBtn", "#langBtn"].map((sel) => {
           const r = document.querySelector(sel).getBoundingClientRect();
           return { sel, left: r.left, right: r.right, width: r.width };
         }),

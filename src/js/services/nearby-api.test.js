@@ -10,6 +10,7 @@ vi.mock("./geocoding-api.js", () => ({ reverseGeocodeLocation: vi.fn() }));
 
 import { reverseGeocodeLocation } from "./geocoding-api.js";
 import { loadNearbyPlaces, isNearbyEligible, __resetNearbyCacheForTests } from "./nearby-api.js";
+import { state } from "../core/state.js";
 
 const ORIGIN = { kind: "city", lat: 43.2333, lon: 0.0782, name: { en: "Tarbes", fr: "Tarbes" } };
 
@@ -18,6 +19,7 @@ function place(name, lat, lon, id) {
 }
 
 let originalFetch;
+const originalLang = state.lang;
 beforeEach(() => {
   originalFetch = globalThis.fetch;
   __resetNearbyCacheForTests();
@@ -25,6 +27,7 @@ beforeEach(() => {
 });
 afterEach(() => {
   globalThis.fetch = originalFetch;
+  state.lang = originalLang;
   vi.restoreAllMocks();
 });
 
@@ -180,5 +183,55 @@ describe("loadNearbyPlaces — weather batching", () => {
     await loadNearbyPlaces(ORIGIN);
 
     expect(reverseGeocodeLocation).toHaveBeenCalledTimes(6); // one ring, not two
+  });
+
+  it("does not reuse localized nearby names after the interface language changes", async () => {
+    reverseGeocodeLocation.mockResolvedValue(place("Lourdes", 43.1, 0.05, "mt-lourdes"));
+    const fetchSpy = vi.fn(async () => ({ ok: true, json: async () => [weatherEntryFor(20)] }));
+    globalThis.fetch = fetchSpy;
+
+    state.lang = "en";
+    await loadNearbyPlaces(ORIGIN);
+    state.lang = "fr";
+    await loadNearbyPlaces(ORIGIN);
+
+    expect(reverseGeocodeLocation).toHaveBeenCalledTimes(12);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it("retries discovery after a transient geocoder outage instead of caching the error", async () => {
+    let calls = 0;
+    reverseGeocodeLocation.mockImplementation(() => {
+      calls++;
+      if (calls <= 6) return Promise.reject(new Error("offline"));
+      return Promise.resolve(place("Lourdes", 43.1, 0.05, "mt-lourdes"));
+    });
+    globalThis.fetch = vi.fn(async () => ({ ok: true, json: async () => [weatherEntryFor(20)] }));
+
+    const failed = await loadNearbyPlaces(ORIGIN);
+    const recovered = await loadNearbyPlaces(ORIGIN);
+
+    expect(failed).toEqual({ status: "error", places: [] });
+    expect(recovered.status).toBe("ready");
+    expect(calls).toBe(12);
+  });
+
+  it("retries weather after a transient batch failure while keeping discovered places", async () => {
+    reverseGeocodeLocation.mockResolvedValue(place("Lourdes", 43.1, 0.05, "mt-lourdes"));
+    let weatherCalls = 0;
+    globalThis.fetch = vi.fn(async () => {
+      weatherCalls++;
+      if (weatherCalls === 1) return { ok: false, status: 503 };
+      return { ok: true, json: async () => [weatherEntryFor(20)] };
+    });
+
+    const failed = await loadNearbyPlaces(ORIGIN);
+    const recovered = await loadNearbyPlaces(ORIGIN);
+
+    expect(failed.status).toBe("error");
+    expect(failed.places).toHaveLength(1);
+    expect(failed.places[0].weather).toBeNull();
+    expect(recovered.status).toBe("ready");
+    expect(weatherCalls).toBe(2);
   });
 });

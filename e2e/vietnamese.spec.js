@@ -345,7 +345,7 @@ test.describe("Tiếng Việt, weather, forecast and photos", () => {
     await expect(page.locator("#heroCityName")).toContainText("Lourdes");
     await expect(page.locator("#heroLandmark .loc-photo")).toHaveClass(/has-photo/);
     const credit = page.locator(".hero .loc-credit");
-    await expect(credit).toHaveText("Nick Castelli · Unsplash ↗");
+    await expect(credit).toHaveText("Ảnh đúng địa điểm · Nick Castelli · Unsplash ↗");
     await expect(credit).toHaveAttribute(
       "aria-label",
       "Ảnh đúng địa điểm — Ảnh của Nick Castelli trên Unsplash",

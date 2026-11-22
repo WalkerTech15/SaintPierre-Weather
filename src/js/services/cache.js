@@ -11,10 +11,25 @@ export function createAsyncCache(ttlMs) {
   return {
     get(key, factory) {
       const hit = map.get(key);
-      if (hit && Date.now() - hit.at < ttlMs) return hit.p;
+      /* Pending work stays deduplicated even when it takes longer than the
+         cache TTL. Start the TTL after success, when a value is actually
+         reusable, rather than when the request began. */
+      if (hit && (!hit.settled || Date.now() - hit.at < ttlMs)) return hit.p;
       const p = factory();
-      map.set(key, { p, at: Date.now() });
-      p.catch(() => map.delete(key));
+      const entry = { p, at: Date.now(), settled: false };
+      map.set(key, entry);
+      p.then(
+        () => {
+          if (map.get(key) !== entry) return;
+          entry.at = Date.now();
+          entry.settled = true;
+        },
+        () => {
+          /* An older request must not evict a newer entry installed after a
+             clear or replacement. */
+          if (map.get(key) === entry) map.delete(key);
+        },
+      );
       return p;
     },
     clear() {

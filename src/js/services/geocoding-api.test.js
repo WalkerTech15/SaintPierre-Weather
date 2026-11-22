@@ -1,5 +1,21 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { geocode, isRelevantGeocodeResult, __featureToLoc } from "./geocoding-api.js";
+
+vi.mock("../core/config.js", async (importOriginal) => ({
+  ...(await importOriginal()),
+  MAPTILER_KEY: "test-maptiler-key",
+}));
+
+import {
+  geocode,
+  isRelevantGeocodeResult,
+  maptilerGeocode,
+  __featureToLoc,
+} from "./geocoding-api.js";
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+  vi.restoreAllMocks();
+});
 
 const location = (name, region, country, extra = {}) => ({
   name: { en: name, fr: name },
@@ -44,6 +60,41 @@ describe("geocoding relevance filter", () => {
     expect(isRelevantGeocodeResult("city", location("Paris", "Île-de-France", "France"))).toBe(
       false,
     );
+  });
+});
+
+describe("MapTiler autocomplete request handling", () => {
+  it("applies the shared fetch timeout to autocomplete requests", async () => {
+    const timeoutController = new AbortController();
+    vi.spyOn(AbortSignal, "timeout").mockReturnValue(timeoutController.signal);
+    const fetchImpl = vi.fn(
+      (_url, { signal }) =>
+        new Promise((_resolve, reject) => {
+          signal.addEventListener("abort", () => reject(signal.reason), { once: true });
+        }),
+    );
+    vi.stubGlobal("fetch", fetchImpl);
+
+    const request = maptilerGeocode("Tarbes");
+    timeoutController.abort(new DOMException("Timed out", "TimeoutError"));
+
+    await expect(request).rejects.toMatchObject({ kind: "timeout" });
+  });
+
+  it("preserves cancellation from the current search", async () => {
+    const fetchImpl = vi.fn(
+      (_url, { signal }) =>
+        new Promise((_resolve, reject) => {
+          signal.addEventListener("abort", () => reject(signal.reason), { once: true });
+        }),
+    );
+    vi.stubGlobal("fetch", fetchImpl);
+    const controller = new AbortController();
+
+    const request = maptilerGeocode("Tarbes", controller.signal);
+    controller.abort();
+
+    await expect(request).rejects.toMatchObject({ kind: "aborted" });
   });
 });
 

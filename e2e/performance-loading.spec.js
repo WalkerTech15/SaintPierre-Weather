@@ -206,7 +206,7 @@ test.describe("no layout shift from deferred work", () => {
       await page.setViewportSize(viewport);
       await installMocks(page);
       await page.route("**://api.open-meteo.com/**", async (route) => {
-        await new Promise((resolve) => setTimeout(resolve, 2000));
+        await new Promise((resolve) => setTimeout(resolve, 3000));
         await route.fallback();
       });
       await page.addInitScript(() => {
@@ -218,6 +218,20 @@ test.describe("no layout shift from deferred work", () => {
       });
       await page.goto("/");
       /* painted, still waiting for the forecast */
+      await expect(page.locator("#forecastRow")).toBeEmpty();
+      /* Exclude first-paint CSS/language settling: this assertion is about a
+         late forecast response, so start from the stable empty-state layout. */
+      await page.evaluate(
+        () =>
+          new Promise((resolve) =>
+            requestAnimationFrame(() =>
+              requestAnimationFrame(() => {
+                window.__cls = 0;
+                resolve();
+              }),
+            ),
+          ),
+      );
       await expect(page.locator("#forecastRow")).toBeEmpty();
       await expect(page.locator(".hero-temp")).toHaveText(/\d/, { timeout: 15000 });
       await page.waitForTimeout(1000);

@@ -17,6 +17,7 @@ import { fetchCurrentBatch } from "../weather/weather-provider.js";
 import { toNearbyWeather } from "../weather/weather-normalizer.js";
 import { createAsyncCache } from "./cache.js";
 import { haversineKm, offsetPoint } from "../core/geo.js";
+import { state } from "../core/state.js";
 
 const NEARBY_RADIUS_KM = 30;
 /* Six probes (60° apart) — enough ring coverage for 3-5 results without
@@ -77,15 +78,28 @@ async function discoverCandidates(loc) {
 }
 
 async function attachWeather(candidates) {
-  const snapshots = await fetchCurrentBatch(
-    candidates.map((c) => c.loc),
-    "nearby",
+  const key = candidates.map(({ loc }) => `${loc.lat.toFixed(3)},${loc.lon.toFixed(3)}`).join(";");
+  const snapshots = await nearbyWeatherCache.get(key, () =>
+    fetchCurrentBatch(
+      candidates.map((c) => c.loc),
+      "nearby",
+    ),
   );
   return candidates.map((c, i) => ({ ...c, weather: toNearbyWeather(snapshots[i]) }));
 }
 
 const nearbyCache = createAsyncCache(NEARBY_CACHE_TTL_MS);
-const cacheKey = (loc) => `${loc.lat.toFixed(3)},${loc.lon.toFixed(3)}`;
+/* Candidate names are language-specific, but weather snapshots are not.
+   Re-discovering translated names should not repeat the same batch request. */
+const nearbyWeatherCache = createAsyncCache(NEARBY_CACHE_TTL_MS);
+const cacheKey = (loc) => `${state.lang}:${loc.lat.toFixed(3)},${loc.lon.toFixed(3)}`;
+
+class NearbyLoadError extends Error {
+  constructor(places = []) {
+    super("Nearby places could not be loaded");
+    this.places = places;
+  }
+}
 
 /**
  * @returns {Promise<{status: "ineligible"|"empty"|"error"|"ready", places: Array}>}
@@ -95,19 +109,28 @@ const cacheKey = (loc) => `${loc.lat.toFixed(3)},${loc.lon.toFixed(3)}`;
  */
 export function loadNearbyPlaces(loc) {
   if (!isNearbyEligible(loc)) return Promise.resolve({ status: "ineligible", places: [] });
-  return nearbyCache.get(cacheKey(loc), async () => {
-    const { list, allFailed } = await discoverCandidates(loc);
-    if (!list.length) return { status: allFailed ? "error" : "empty", places: [] };
-    try {
-      const places = await attachWeather(list);
-      return { status: "ready", places };
-    } catch {
-      return { status: "error", places: list.map((c) => ({ ...c, weather: null })) };
-    }
-  });
+  return nearbyCache
+    .get(cacheKey(loc), async () => {
+      const { list, allFailed } = await discoverCandidates(loc);
+      if (!list.length) {
+        if (allFailed) throw new NearbyLoadError();
+        return { status: "empty", places: [] };
+      }
+      try {
+        const places = await attachWeather(list);
+        return { status: "ready", places };
+      } catch {
+        throw new NearbyLoadError(list.map((c) => ({ ...c, weather: null })));
+      }
+    })
+    .catch((error) => {
+      if (error instanceof NearbyLoadError) return { status: "error", places: error.places };
+      throw error;
+    });
 }
 
 /* Test seam only — mirrors the pattern in services/photo-api.js. */
 export function __resetNearbyCacheForTests() {
   nearbyCache.clear();
+  nearbyWeatherCache.clear();
 }

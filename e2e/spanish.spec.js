@@ -344,7 +344,7 @@ test.describe("Español, weather, forecast and photos", () => {
     await expect(page.locator("#heroCityName")).toContainText("Lourdes");
     await expect(page.locator("#heroLandmark .loc-photo")).toHaveClass(/has-photo/);
     const credit = page.locator(".hero .loc-credit");
-    await expect(credit).toHaveText("Nick Castelli · Unsplash ↗");
+    await expect(credit).toHaveText("Foto del lugar exacto · Nick Castelli · Unsplash ↗");
     await expect(credit).toHaveAttribute(
       "aria-label",
       "Foto del lugar exacto — Foto de Nick Castelli en Unsplash",

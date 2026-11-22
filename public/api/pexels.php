@@ -76,6 +76,8 @@ register_shutdown_function(static function (): void {
 });
 
 const PEXELS_ENDPOINT   = 'https://api.pexels.com/v1/search';
+const PEXELS_PHOTO_ENDPOINT = 'https://api.pexels.com/v1/photos';
+const PHOTO_ID_PATTERN  = '/^[1-9][0-9]{0,15}$/';
 const QUERY_MIN_LENGTH  = 2;
 const QUERY_MAX_LENGTH  = 120;
 const CONNECT_TIMEOUT_S = 4;
@@ -124,6 +126,64 @@ function ws_substr(string $value, int $length): string
     }
 
     return '';
+}
+
+/** Keep Pexels responses on the same narrow, trusted shape as api/pexels.js. */
+function safe_provider_url(mixed $value, string $host): ?string
+{
+    if (!is_string($value) || strlen($value) > 2048) {
+        return null;
+    }
+    $parts = parse_url($value);
+    if (!is_array($parts)
+        || strtolower($parts['scheme'] ?? '') !== 'https'
+        || strtolower($parts['host'] ?? '') !== $host
+        || isset($parts['user'])
+        || isset($parts['pass'])) {
+        return null;
+    }
+
+    return $value;
+}
+
+function to_photo_payload(mixed $photo): ?array
+{
+    if (!is_array($photo)) {
+        return null;
+    }
+    $src = is_array($photo['src'] ?? null) ? $photo['src'] : [];
+    $large = safe_provider_url($src['large'] ?? null, 'images.pexels.com');
+    if ($large === null) {
+        return null;
+    }
+
+    $result = ['large' => $large];
+    foreach (['medium', 'large2x'] as $size) {
+        $url = safe_provider_url($src[$size] ?? null, 'images.pexels.com');
+        if ($url !== null) {
+            $result[$size] = $url;
+        }
+    }
+    /* Preserve the existing response field order for predictable snapshots. */
+    $sizes = [];
+    foreach (['medium', 'large', 'large2x'] as $size) {
+        if (isset($result[$size])) {
+            $sizes[$size] = $result[$size];
+        }
+    }
+
+    $link = safe_provider_url($photo['url'] ?? null, 'www.pexels.com');
+
+    return [
+        'src'          => $sizes,
+        'photographer' => is_string($photo['photographer'] ?? null)
+            ? ws_substr($photo['photographer'], 120)
+            : '',
+        'link'         => $link ?? '',
+        'alt'          => is_string($photo['alt'] ?? null)
+            ? ws_substr($photo['alt'], 200)
+            : '',
+    ];
 }
 
 /**
@@ -278,15 +338,8 @@ function clean_query(mixed $raw): ?string
  * Uses cURL when available and falls back to a stream context, because shared
  * hosts vary in which of the two is enabled.
  */
-function fetch_from_pexels(string $query, string $apiKey): array
+function fetch_pexels_url(string $url, string $apiKey): array
 {
-    $url = PEXELS_ENDPOINT . '?' . http_build_query([
-        'query'       => $query,
-        'orientation' => 'landscape',
-        'per_page'    => CANDIDATE_COUNT,
-        'size'        => 'medium',
-    ], '', '&', PHP_QUERY_RFC3986);
-
     /* The key travels in the Authorization header, never in the URL — query
        strings end up in access logs, proxies and Referer headers. */
     $headers = ['Authorization: ' . $apiKey, 'Accept: application/json'];
@@ -347,6 +400,23 @@ function fetch_from_pexels(string $query, string $apiKey): array
     return [$status, json_decode($body, true)];
 }
 
+function fetch_from_pexels(string $query, string $apiKey): array
+{
+    $url = PEXELS_ENDPOINT . '?' . http_build_query([
+        'query'       => $query,
+        'orientation' => 'landscape',
+        'per_page'    => CANDIDATE_COUNT,
+        'size'        => 'medium',
+    ], '', '&', PHP_QUERY_RFC3986);
+
+    return fetch_pexels_url($url, $apiKey);
+}
+
+function fetch_from_pexels_photo(string $id, string $apiKey): array
+{
+    return fetch_pexels_url(PEXELS_PHOTO_ENDPOINT . '/' . $id, $apiKey);
+}
+
 /* ── Request handling ──────────────────────────────────────────────────── */
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') {
@@ -354,14 +424,44 @@ if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'GET') {
     respond(405, ['error' => 'method_not_allowed']);
 }
 
-$query = clean_query($_GET['query'] ?? null);
-if ($query === null) {
-    respond(400, ['error' => 'invalid_query']);
-}
-
 if (rate_limit_exceeded()) {
     header('Retry-After: ' . RATE_LIMIT_WINDOW_S);
     respond(429, ['error' => 'rate_limited']);
+}
+
+/* Curated locations request a reviewed photo by ID. Keep this route in parity
+   with the Vercel and Vite handlers; otherwise Apache silently drops to query
+   validation and exact curated imagery never loads there. */
+if (array_key_exists('id', $_GET)) {
+    $id = is_string($_GET['id']) ? trim($_GET['id']) : '';
+    if (preg_match(PHOTO_ID_PATTERN, $id) !== 1) {
+        respond(400, ['error' => 'invalid_id']);
+    }
+
+    $apiKey = load_pexels_key();
+    if ($apiKey === null) {
+        error_log('WeatherSphere: Pexels secret file missing or unreadable.');
+        respond(503, ['error' => 'unavailable']);
+    }
+
+    [$status, $data] = fetch_from_pexels_photo($id, $apiKey);
+    if ($status === 404) {
+        respond(404, ['error' => 'not_found']);
+    }
+    if ($status === 429) {
+        header('Retry-After: ' . RATE_LIMIT_WINDOW_S);
+        respond(429, ['error' => 'rate_limited']);
+    }
+    if ($status !== 200 || !is_array($data)) {
+        respond(502, ['error' => 'upstream_error']);
+    }
+
+    respond(200, ['photo' => to_photo_payload($data)]);
+}
+
+$query = clean_query($_GET['query'] ?? null);
+if ($query === null) {
+    respond(400, ['error' => 'invalid_query']);
 }
 
 $apiKey = load_pexels_key();
@@ -386,44 +486,7 @@ $rawPhotos = is_array($data['photos'] ?? null) ? $data['photos'] : [];
    everything else Pexels returns (ids, avg colours, upstream URLs we don't use)
    is dropped rather than forwarded blindly. Returns null for anything without
    a usable https image or link, exactly like the by-ID branch above. */
-$toPayload = static function ($photo): ?array {
-    if (!is_array($photo)) {
-        return null;
-    }
-    $src = is_array($photo['src'] ?? null) ? $photo['src'] : [];
-    $pick = static function (array $src, string $key): ?string {
-        $value = $src[$key] ?? null;
-
-        return is_string($value) && str_starts_with($value, 'https://') ? $value : null;
-    };
-
-    $sizes = array_filter([
-        'medium'  => $pick($src, 'medium'),
-        'large'   => $pick($src, 'large'),
-        'large2x' => $pick($src, 'large2x'),
-    ], static fn(?string $v): bool => $v !== null);
-
-    if ($sizes === []) {
-        return null;
-    }
-
-    $link = $photo['url'] ?? '';
-
-    return [
-        'src'          => $sizes,
-        'photographer' => is_string($photo['photographer'] ?? null)
-            ? ws_substr($photo['photographer'], 120)
-            : '',
-        'link'         => is_string($link) && str_starts_with($link, 'https://www.pexels.com/')
-            ? $link
-            : '',
-        'alt'          => is_string($photo['alt'] ?? null)
-            ? ws_substr($photo['alt'], 200)
-            : '',
-    ];
-};
-
-$photos = array_values(array_filter(array_map($toPayload, $rawPhotos)));
+$photos = array_values(array_filter(array_map('to_photo_payload', $rawPhotos)));
 
 /* `photo` (first candidate) kept for anything relying on the old
    single-photo shape; `photos` is the new ranked-candidate pool the client

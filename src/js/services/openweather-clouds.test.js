@@ -1,6 +1,7 @@
 /* The browser side of the Clouds layer: where its tiles come from, whether the
  * layer may be offered, and what a failed tile means. */
 import { describe, it, expect, vi } from "vitest";
+import { FETCH_TIMEOUT_MS } from "../core/config.js";
 import {
   CLOUDS_ENDPOINT,
   CLOUDS_SOURCE_MAX_ZOOM,
@@ -58,6 +59,41 @@ describe("fetchCloudsAvailable", () => {
     ],
   ])("is false for %s", async (_name, impl) => {
     expect(await fetchCloudsAvailable({ fetchImpl: vi.fn(async () => impl()) })).toBe(false);
+  });
+
+  it("combines caller cancellation with the standard request timeout", async () => {
+    const timeoutController = new AbortController();
+    const timeoutSpy = vi.spyOn(AbortSignal, "timeout").mockReturnValue(timeoutController.signal);
+    const callerController = new AbortController();
+    let requestSignal;
+    const fetchImpl = vi.fn(async (_url, options) => {
+      requestSignal = options.signal;
+      return reply(200, { available: true });
+    });
+
+    expect(await fetchCloudsAvailable({ signal: callerController.signal, fetchImpl })).toBe(true);
+    expect(timeoutSpy).toHaveBeenCalledWith(FETCH_TIMEOUT_MS);
+    expect(requestSignal).not.toBe(callerController.signal);
+    expect(requestSignal.aborted).toBe(false);
+
+    callerController.abort();
+    expect(requestSignal.aborted).toBe(true);
+  });
+
+  it("treats an aborted timeout probe as unavailable instead of waiting forever", async () => {
+    const timeoutController = new AbortController();
+    vi.spyOn(AbortSignal, "timeout").mockReturnValue(timeoutController.signal);
+    const fetchImpl = vi.fn(
+      (_url, { signal }) =>
+        new Promise((_resolve, reject) => {
+          signal.addEventListener("abort", () => reject(signal.reason), { once: true });
+        }),
+    );
+
+    const result = fetchCloudsAvailable({ fetchImpl });
+    timeoutController.abort(new DOMException("Timed out", "TimeoutError"));
+
+    await expect(result).resolves.toBe(false);
   });
 });
 

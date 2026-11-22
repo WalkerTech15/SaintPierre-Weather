@@ -255,10 +255,10 @@ test.describe("sidebar/mobile navigation item order", () => {
       expect(new Set(await navItemViews(page)).size).toBe(6); /* no duplicated view */
       expect(await navItemLabels(page)).toEqual(EXPECTED_LABELS_FR);
 
-      /* the top header still carries only the logo, search, mode toggle,
-         theme and language controls — navigation never migrated up there */
+      /* Navigation stays in the sidebar; the header actions include the
+         notification, theme and language controls plus the mode toggle. */
       await expect(page.locator(".topnav .side-item")).toHaveCount(0);
-      await expect(page.locator(".topnav-actions > *")).toHaveCount(3);
+      await expect(page.locator(".topnav-actions > *")).toHaveCount(4);
     });
   }
 

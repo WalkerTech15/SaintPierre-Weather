@@ -6,7 +6,8 @@
  * The layer is raster tiles drawn by the map itself, so nothing here parses
  * cloud data — this module only says whether the layer can be offered, where
  * its tiles come from, and what a failed tile request means. */
-import { WEATHER_ERROR_KINDS } from "../weather/weather-errors.js";
+import { FETCH_TIMEOUT_MS } from "../core/config.js";
+import { anySignal, WEATHER_ERROR_KINDS } from "../weather/weather-errors.js";
 
 export const CLOUDS_ENDPOINT = "/api/openweather-clouds";
 export const CLOUDS_ATTRIBUTION_URL = "https://openweathermap.org";
@@ -29,8 +30,10 @@ export function cloudsTileTemplate(origin = globalThis.location?.origin ?? "") {
  */
 export async function fetchCloudsAvailable({ signal, fetchImpl = fetch } = {}) {
   try {
+    const timeout = AbortSignal.timeout(FETCH_TIMEOUT_MS);
+    const requestSignal = signal ? anySignal([signal, timeout]) : timeout;
     const response = await fetchImpl(`${CLOUDS_ENDPOINT}?status=1`, {
-      signal,
+      signal: requestSignal,
       headers: { Accept: "application/json" },
     });
     if (!response.ok) return false;

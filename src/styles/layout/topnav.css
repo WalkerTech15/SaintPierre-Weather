@@ -38,7 +38,7 @@ body[data-theme="dark"] .topnav {
   min-width: 0;
 }
 
-/* ≥901px (above the drawer breakpoint): a true 3-column grid so the search
+/* ≥1400px: a true 3-column grid so the search
    bar is centered against the FULL bar width, not just the leftover space
    between two differently-sized side groups (that asymmetry — logo ~180px
    vs. mode+theme+lang ~300px — is what made the search bar look off-center).
@@ -46,16 +46,20 @@ body[data-theme="dark"] .topnav {
    the same pixel width as each other regardless of their real content size,
    which is what keeps the center track (and the search bar inside it)
    genuinely centered whenever there is room. The outer tracks floor at their
-   content's own size (`auto`), not a fixed 280px: the actions group (display
-   toggle + bell + theme + language) is ~334px, so a 280px floor let it spill
-   left over the search bar on 901–1440px laptops and zoomed windows. Now the
-   search column is the one that gives way. */
-@media (min-width: 901px) {
+   content's own size (`auto`), not a fixed 280px: below 1400px, the action
+   group needs more room than the symmetric tracks can provide. At those
+   widths, the flex layout keeps the search centered in the usable space and
+   lets it shrink before it can overlap a control. */
+@media (min-width: 1400px) {
   .topnav-inner {
     display: grid;
-    grid-template-columns: minmax(auto, 1fr) minmax(200px, 660px) minmax(auto, 1fr);
+    grid-template-columns: minmax(0, 1fr) minmax(200px, 520px) minmax(0, 1fr);
     max-width: 1440px;
     margin-inline: auto;
+  }
+
+  .topnav-center {
+    justify-content: center;
   }
 }
 
@@ -137,7 +141,7 @@ body[data-theme="dark"] .brand-logo {
   border-radius: 12px;
 }
 
-@media (min-width: 901px) {
+@media (min-width: 1400px) {
   /* Keep the display-mode control between the search and theme controls,
      with a little extra separation from the theme button. */
   .topnav-actions #modeToggle {

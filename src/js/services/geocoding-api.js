@@ -18,6 +18,7 @@ import {
   REVERSE_GEOCODE_TTL_MS,
 } from "../core/config.js";
 import { createBoundedCache, createAsyncCache } from "./cache.js";
+import { requestJson } from "../weather/weather-errors.js";
 
 /* GeoNames codes for a country or territory (Open-Meteo's `feature_code`):
    PCLI independent state, PCLD dependent, PCLF freely associated, PCLS semi-
@@ -309,9 +310,9 @@ export async function maptilerGeocode(query, signal) {
   const url =
     `https://api.maptiler.com/geocoding/${encodeURIComponent(q)}.json` +
     `?key=${MAPTILER_KEY}&language=${geocodeLanguages()}&autocomplete=true&fuzzyMatch=true&limit=7`;
-  const res = await fetch(url, { signal });
-  if (!res.ok) throw new Error("HTTP " + res.status);
-  const d = await res.json();
+  /* Share the standard request timeout/error handling while preserving the
+     caller's cancellation when a newer search supersedes this one. */
+  const d = await requestJson(url, { signal });
   const locs = (d.features || [])
     .map(featureToLoc)
     .filter((loc) => isRelevantGeocodeResult(q, loc));

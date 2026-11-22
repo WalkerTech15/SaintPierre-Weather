@@ -56,13 +56,22 @@ function placesProxy({ landmark = false } = {}) {
   };
 }
 
-async function openAndSearch(page, overrides, { lang = "fr" } = {}) {
+async function openAndSearch(page, overrides, { lang = "fr", resetCls = false } = {}) {
   await installMocks(page, overrides);
   await page.goto("/");
   await expect(page.locator("#heroCityName")).not.toBeEmpty();
   if (lang === "en") {
     await page.locator("#langBtn").click();
     await page.locator('#langMenu button[data-lang="en"]').click();
+  }
+  if (resetCls) {
+    /* Measure the photo update itself, not initial fonts, app hydration, or
+       the first forecast paint. The hero has settled before this baseline. */
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+      window.__cls = 0;
+    });
   }
   /* below 520px the field sits behind the mobile search button */
   if (!(await page.locator("#searchInput").isVisible())) {
@@ -77,7 +86,7 @@ test.describe("an illustrative stock photo is never passed off as the place", ()
   test("is labelled on the image and to a screen reader, in French", async ({ page }) => {
     await openAndSearch(page, { photoProxy: illustrativePexels });
     await expect(heroSlot(page)).toHaveAttribute("data-photo-confidence", "generic");
-    await expect(credit(page)).toHaveText("Pexels ↗");
+    await expect(credit(page)).toHaveText("Image générique · Pexels ↗");
     await expect(credit(page)).toHaveAttribute(
       "aria-label",
       /^Image générique — lieu exact non vérifié — Photo de Stock Shooter sur Pexels$/,
@@ -99,7 +108,7 @@ test.describe("an illustrative stock photo is never passed off as the place", ()
 
   test("the label follows a language switch after the photo is shown", async ({ page }) => {
     await openAndSearch(page, { photoProxy: illustrativePexels });
-    await expect(credit(page)).toHaveText("Pexels ↗");
+    await expect(credit(page)).toHaveText("Image générique · Pexels ↗");
     await page.locator("#langBtn").click();
     await page.locator('#langMenu button[data-lang="en"]').click();
     await expect(credit(page)).toHaveText("Generic image · Pexels ↗");
@@ -160,7 +169,7 @@ test.describe("the longer label fits every layout", () => {
             if (!entry.hadRecentInput) window.__cls += entry.value;
         }).observe({ type: "layout-shift", buffered: true });
       });
-      await openAndSearch(page, { photoProxy: illustrativePexels });
+      await openAndSearch(page, { photoProxy: illustrativePexels }, { resetCls: true });
       await expect(credit(page)).toBeVisible();
 
       const overflow = await page.evaluate(

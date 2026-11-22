@@ -1,4 +1,5 @@
 import { defineConfig, loadEnv } from "vite";
+import { toPhotoPayload as toPexelsPayload } from "./api/pexels.js";
 import { lightningResponse } from "./api/xweather-lightning.js";
 import { cloudsResponse } from "./api/openweather-clouds.js";
 
@@ -56,26 +57,8 @@ function cleanQuery(raw) {
   return query;
 }
 
-/* Mirror of the PHP re-projection: only these fields ever reach the browser. */
-function toPayload(photo) {
-  const src = (photo && photo.src) || {};
-  const https = (v) => (typeof v === "string" && v.startsWith("https://") ? v : null);
-  const sizes = Object.fromEntries(
-    [
-      ["medium", https(src.medium)],
-      ["large", https(src.large)],
-      ["large2x", https(src.large2x)],
-    ].filter(([, v]) => v !== null),
-  );
-  if (Object.keys(sizes).length === 0) return null;
-  const link = typeof photo.url === "string" ? photo.url : "";
-  return {
-    src: sizes,
-    photographer: typeof photo.photographer === "string" ? photo.photographer.slice(0, 120) : "",
-    link: link.startsWith("https://www.pexels.com/") ? link : "",
-    alt: typeof photo.alt === "string" ? photo.alt.slice(0, 200) : "",
-  };
-}
+/* Keep dev/preview aligned with production when projecting untrusted fields. */
+const toPayload = toPexelsPayload;
 
 function pexelsDevProxy(apiKey) {
   const handler = async (req, res, next) => {

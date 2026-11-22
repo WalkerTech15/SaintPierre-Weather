@@ -76,7 +76,9 @@
 
 @media (max-width: 900px) {
   .topnav-inner {
-    padding: 0 var(--s-2);
+    /* The .topnav already provides the mobile safe-area gutter. A second
+       inset here needlessly squeezes the compact search and action buttons. */
+    padding: 0;
     gap: var(--s-2);
   }
   .icon-btn.nav-burger {
@@ -246,21 +248,25 @@
   .topnav-inner {
     gap: 8px;
   }
+  .topnav-actions {
+    gap: 8px;
+  }
+  .topnav-actions .lang-btn {
+    gap: 4px;
+    padding-inline: 4px;
+  }
 }
 
-/* Narrowest phones (320px and the ~340px foldable cover screens): the header
-   is padded twice — 16px on .topnav (with the notch safe-area, see
-   utilities/accessibility.css) and another 16px on .topnav-inner — which
-   leaves 256px for ~287px of controls, so the mobile search button ended up
-   under the theme button. .topnav already provides the gutter, so the inner
-   padding goes and the two gaps tighten; every 44px target keeps its size. */
+/* The 320px phones still need compact gaps after removing the duplicate
+   inner gutter; every control keeps its full 44px touch target. */
 @media (max-width: 350px) {
   .topnav-inner {
     padding-inline: 0;
+    gap: 4px;
   }
   .topnav-start,
   .topnav-actions {
-    gap: 8px;
+    gap: 4px;
   }
 }
 
